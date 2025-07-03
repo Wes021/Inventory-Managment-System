@@ -10,6 +10,8 @@
 
         public int minimum_quantity_level { get; set; }
 
+        public int maximum_quantity_level { get; set; }
+
         public string status { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace Inventory.Models.Reopositories
             _inventoryManagmentSystemContext = inventoryManagmentSystemContext;
         }
 
-        private async Task<List<GetProductsDTO>> GetProductsHelpers(SqlCommand sc)
+        private async Task<IEnumerable<GetProductsDTO>> GetProductsHelpers(SqlCommand sc)
         {
             var products = new List<GetProductsDTO>();
             using (SqlConnection conn = new SqlConnection(_inventoryManagmentSystemContext.Database.GetConnectionString()))
@@ -39,7 +39,8 @@ namespace Inventory.Models.Reopositories
                             supplier = sdr.GetString(sdr.GetOrdinal("supplier")),
                             status = sdr.GetString(sdr.GetOrdinal("status")),
                             Category = sdr.GetString(sdr.GetOrdinal("category")),
-                            minimum_quantity_level = sdr.GetInt32(sdr.GetOrdinal("minimum_quantity_level"))
+                            minimum_quantity_level = sdr.GetInt32(sdr.GetOrdinal("minimum_quantity_level")),
+                            maximum_quantity_level=sdr.GetInt32(sdr.GetOrdinal("maximum_quantity_level"))
 
                         };
                         products.Add(product);
@@ -53,7 +54,7 @@ namespace Inventory.Models.Reopositories
             return products;
         }
 
-        public async Task<List<GetProductsDTO>> GetProductAsync()
+        public async Task<IEnumerable<GetProductsDTO>> GetProductAsync()
         {
 
             using (SqlCommand sc = new SqlCommand("GetProducts"))

@@ -6,6 +6,7 @@ using Inventory.Models.IRepositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Sieve.Services;
 
 namespace Inventory.Models.Reopositories
 {
@@ -13,23 +14,24 @@ namespace Inventory.Models.Reopositories
     {
         private readonly InventoryManagmentSystemContext _inventoryManagmentSystemContext;
         private readonly IMapper _mapper;
+        private readonly SieveProcessor _sieveProcessor;
 
-        public InventoryRepository(InventoryManagmentSystemContext inventoryManagmentSystemContext, IMapper mapper)
+        public InventoryRepository(InventoryManagmentSystemContext inventoryManagmentSystemContext, IMapper mapper, SieveProcessor sieveProcessor)
         {
             _inventoryManagmentSystemContext = inventoryManagmentSystemContext;
             _mapper = mapper;
+            _sieveProcessor = sieveProcessor;
         }
 
-        private async Task<List<StockTransactionDTO>> GetStockTransactionsHelper(SqlCommand sc)
+        private async Task<IEnumerable<StockTransactionDTO>> GetStockTransactionsHelper(SqlCommand sc)
         {
             var stockTrans = new List<StockTransactionDTO>();
-
+            
             using (SqlConnection conn = new SqlConnection(_inventoryManagmentSystemContext.Database.GetConnectionString()))
             {
                 await conn.OpenAsync();
 
                 sc.Connection = conn;
-
 
                 using (SqlDataReader sdr = sc.ExecuteReader())
                 {
@@ -37,7 +39,6 @@ namespace Inventory.Models.Reopositories
                     {
                         var stockTransaction = new StockTransactionDTO
                         {
-
                             TransId = sdr.GetInt32(sdr.GetOrdinal("trans_id")),
                             ProductId = sdr.GetInt32(sdr.GetOrdinal("product_id")),
                             Quantity = sdr.GetInt32(sdr.GetOrdinal("quantity")),
@@ -46,17 +47,12 @@ namespace Inventory.Models.Reopositories
                             user = sdr.GetString(sdr.GetOrdinal("fisrtName")) + " " + sdr.GetString(sdr.GetOrdinal("lastName")),
                             product = sdr.GetString(sdr.GetOrdinal("product_name")),
                             transType = sdr.GetString(sdr.GetOrdinal("type_name"))
-
                         };
                         stockTrans.Add(stockTransaction);
-
                     }
-
                 }
-
-
-
             }
+            
 
             return stockTrans;
         }
@@ -74,7 +70,8 @@ namespace Inventory.Models.Reopositories
             }
         }
 
-        public async Task<List<StockTransactionDTO>> GetStockTransactionsAsync()
+
+        public async Task<IEnumerable<StockTransactionDTO>> GetStockTransactionsAsync()
         {
 
 
@@ -87,7 +84,7 @@ namespace Inventory.Models.Reopositories
 
 
 
-        public async Task<List<GetProductTransactionsDTO>> GetProductTransactionsAsync(int productId)
+        public async Task<IEnumerable<GetProductTransactionsDTO>> GetProductTransactionsAsync(int productId)
         {
             var flatTransactions = new List<FlatProductTransactionDTO>();
 
@@ -139,38 +136,8 @@ namespace Inventory.Models.Reopositories
             return result;
         }
 
-        public async Task<int> NewTransactionAsync(StockTransaction transaction)
-        {
-            var product = await _inventoryManagmentSystemContext.Products.FindAsync(transaction.ProductId);
 
-            if (product == null)
-            {
-                throw new InvalidOperationException("Product not found.");
-            }
-
-            
-            if (product.Quantity < transaction.Quantity)
-            {
-                throw new InvalidOperationException("Insufficient stock.");
-            }
-
-            
-            if ((product.Quantity - transaction.Quantity) < product.minimum_quantity_level)
-            {
-                throw new InvalidOperationException($"Transaction would drop stock below the minimum allowed level ({product.minimum_quantity_level}).");
-            }
-
-            
-            product.Quantity -= transaction.Quantity;
-
-            
-            await _inventoryManagmentSystemContext.StockTransactions.AddAsync(transaction);
-
-            
-            _inventoryManagmentSystemContext.Products.Update(product);
-
-            return await _inventoryManagmentSystemContext.SaveChangesAsync();
-        }
+        
 
     }
 }

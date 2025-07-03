@@ -2,11 +2,13 @@
 using Inventory.DTO_S.Product;
 using Inventory.Mappers.Product;
 using Inventory.Models.IRepositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inventory.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
@@ -17,6 +19,7 @@ namespace Inventory.Controllers
             _productRepository = productRepository;
         }
 
+        [Authorize(Roles = "Admin, Employee")]
         [HttpGet("GetProducts")]
         public async Task<IActionResult> GetProducts()
         {
@@ -24,6 +27,8 @@ namespace Inventory.Controllers
             return Ok(products);
         }
 
+
+        
         [HttpPost("AddProduct")]
         public async Task<IActionResult> AddProduct(ProductDTO productDTO)
         {
@@ -44,6 +49,8 @@ namespace Inventory.Controllers
             }
         }
 
+
+        [Authorize(Roles = "Admin, Employee")]
         [HttpGet("GetProductById/{id}")]
         public async Task<IActionResult> GetProductById(int id)
         {
@@ -55,6 +62,8 @@ namespace Inventory.Controllers
             return Ok(product);
         }
 
+
+        
         [HttpDelete("DeleteProduct/{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
@@ -74,6 +83,8 @@ namespace Inventory.Controllers
             }
         }
 
+
+        
         [HttpPut("UpdateProduct/{id}")]
         public async Task<IActionResult> UpdateProduct(UpdatePoductDTO updatePoductDTO, int id)
         {

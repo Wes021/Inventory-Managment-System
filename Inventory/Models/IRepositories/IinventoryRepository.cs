@@ -6,13 +6,13 @@ namespace Inventory.Models.IRepositories
 {
     public interface IinventoryRepository
     {
-        Task<List<StockTransactionDTO>> GetStockTransactionsAsync();
+        Task<IEnumerable<StockTransactionDTO>> GetStockTransactionsAsync();
 
         Task<StockTransactionDTO> GetStockTransactionsByIdAsync(int id);
 
-        Task<List<GetProductTransactionsDTO>> GetProductTransactionsAsync(int productId);
+        Task<IEnumerable<GetProductTransactionsDTO>> GetProductTransactionsAsync(int productId);
 
-        Task<int> NewTransactionAsync(StockTransaction transaction);
+        //Task<int> NewTransactionAsync(StockTransaction transaction);
 
     }
 }

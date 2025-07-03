@@ -1,4 +1,5 @@
 ﻿using Inventory.DTO_S;
+using Inventory.DTO_S.Employee;
 using Inventory.DTO_S.Product;
 using Inventory.Models.IRepositories;
 using Microsoft.Data.SqlClient;
@@ -16,7 +17,7 @@ namespace Inventory.Models.Reopositories
         }
 
 
-        private async Task<List<GetEmployeeDTO>> getEmployeeHelper(SqlCommand sc)
+        private async Task<IEnumerable<GetEmployeeDTO>> getEmployeeHelper(SqlCommand sc)
         {
             var Employees = new List<GetEmployeeDTO>();
             using (SqlConnection conn = new SqlConnection(_inventoryManagmentSystemContext.Database.GetConnectionString()))
@@ -48,7 +49,7 @@ namespace Inventory.Models.Reopositories
         }
 
 
-        public async Task<List<GetEmployeeDTO>> GetAllEmployeesAsync()
+        public async Task<IEnumerable<GetEmployeeDTO>> GetAllEmployeesAsync()
         {
 
             using (SqlCommand sc = new SqlCommand("GetEmployees"))
@@ -70,6 +71,30 @@ namespace Inventory.Models.Reopositories
 
             }
             throw new NotImplementedException();
+        }
+
+
+        public async Task<IEnumerable<GetLoginHistory>> GetAllLoginHistory()
+        {
+            
+
+            var loginData =await _inventoryManagmentSystemContext.LoginHistories
+                .Include(l => l.User)
+                .OrderByDescending(l => l.loginTime)
+                .Select(l => new GetLoginHistory
+                {
+                    id=l.id,
+                    EmployeeName = l.User.fisrtName +" "+l.User.lastName,
+                    email=l.User.Email,
+                    loginTime=l.loginTime,
+                    IPAddress=l.IPAddress,
+                    UserAgent=l.UserAgent
+                    
+                })
+                .ToListAsync();
+            
+
+            return loginData;
         }
     }
 }

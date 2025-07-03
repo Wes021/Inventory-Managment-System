@@ -37,8 +37,9 @@ public partial class InventoryManagmentSystemContext : IdentityDbContext<Applica
     public virtual DbSet<UserStatus> UserStatuses { get; set; }
 
     public virtual DbSet<FlatProductTransactionDTO> FlatProductTransactionDTOs { get; set; }
+    public virtual DbSet<LoginHistory> LoginHistories { get; set; }
 
-    
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -48,13 +49,13 @@ public partial class InventoryManagmentSystemContext : IdentityDbContext<Applica
         modelBuilder.Entity<IdentityRole>().HasData(
         new IdentityRole
         {
-            Id = "aad9d1e7-b5b7-44b3-a90d-dc0f8fe0a1af", // fixed GUID for Admin
+            Id = "aad9d1e7-b5b7-44b3-a90d-dc0f8fe0a1af", 
             Name = "Admin",
             NormalizedName = "ADMIN"
         },
         new IdentityRole
         {
-            Id = "ec7312cb-1545-4dc1-b03e-4cf670e0e99f", // fixed GUID for Employee
+            Id = "ec7312cb-1545-4dc1-b03e-4cf670e0e99f", 
             Name = "Employee",
             NormalizedName = "EMPLOYEE"
         }

@@ -15,7 +15,7 @@ namespace Inventory.Models.Reopositories
             _inventoryManagmentSystemContext = inventoryManagmentSystemContext;
         }
 
-        private async Task<List<ProductLevelStockDTO>> GetStockLevelHepler(SqlCommand sc)
+        private async Task<IEnumerable<ProductLevelStockDTO>> GetStockLevelHepler(SqlCommand sc)
         {
             var StockLevels = new List<ProductLevelStockDTO>();
 
@@ -33,8 +33,9 @@ namespace Inventory.Models.Reopositories
                             Quantity = sdr.GetInt32(sdr.GetOrdinal("quantity")),
                             ProductName = sdr.GetString(sdr.GetOrdinal("product_name")),
                             status = sdr.GetString(sdr.GetOrdinal("product_status")),
-                            minimum_quantity_level = sdr.GetInt32(sdr.GetOrdinal("minimum_quantity_level"))
-
+                            minimum_quantity_level = sdr.GetInt32(sdr.GetOrdinal("minimum_quantity_level")),
+                            maximum_quantity_level=sdr.GetInt32(sdr.GetOrdinal("maximum_quantity_level"))
+                            
 
                         };
 
@@ -47,7 +48,7 @@ namespace Inventory.Models.Reopositories
             return StockLevels;
         }
 
-        public async Task<List<ProductLevelStockDTO>> GetStockLevelsAsync()
+        public async Task<IEnumerable<ProductLevelStockDTO>> GetStockLevelsAsync()
         {
 
 
@@ -76,23 +77,8 @@ namespace Inventory.Models.Reopositories
 
 
 
-        public async Task<int> UpdateMinimunStockLevel(Product product, int id)
-        {
-            var existingProduct = await _inventoryManagmentSystemContext.Products
-                .FirstOrDefaultAsync(s => s.ProductId == id);
-            if (existingProduct == null)
-            {
-                throw new InvalidOperationException($"Product with Id = {id} not found.");
-            }
-            existingProduct.minimum_quantity_level = product.minimum_quantity_level;
 
-            // No need to call Update, the context is already tracking the entity
-            return await _inventoryManagmentSystemContext.SaveChangesAsync();
-        }
-
-
-
-        public async Task<List<ProductLevelStockDTO>> GetLowStockProductsAsync()
+        public async Task<IEnumerable<ProductLevelStockDTO>> GetLowStockProductsAsync()
         {
 
             using (SqlCommand sc = new SqlCommand("GetLowStockProducts"))

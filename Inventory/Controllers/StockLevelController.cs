@@ -4,26 +4,31 @@ using Inventory.Mappers.StockTrsansAction;
 using Inventory.Models;
 using Inventory.Models.IRepositories;
 using Inventory.Models.Reopositories;
+using Inventory.Services.IServicesInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inventory.Controllers
 {
+    [Authorize(Roles = "Admin,Employee")]
     [Route("api/[controller]")]
     [ApiController]
     public class StockLevelController : ControllerBase
     {
         private readonly IStockLevelRepository _stockLevelRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IinventoryServices _iinventoryServices;
 
-        public StockLevelController(IStockLevelRepository stockLevelRepository, IProductRepository productRepository)
+        public StockLevelController(IStockLevelRepository stockLevelRepository, IProductRepository productRepository, IinventoryServices iinventoryServices)
         {
             _stockLevelRepository = stockLevelRepository;
             _productRepository = productRepository;
+            _iinventoryServices = iinventoryServices;
         }
 
+        
         [HttpGet("GetStockLevel")]
-
         public async Task<IActionResult> GetProducts()
         {
             var StoclLevels = await _stockLevelRepository.GetStockLevelsAsync();
@@ -31,6 +36,7 @@ namespace Inventory.Controllers
         }
 
 
+        
         [HttpGet("GetStockLevelById/{id}")]
         public async Task<IActionResult> GetStockLevelById(int id)
         {
@@ -42,8 +48,9 @@ namespace Inventory.Controllers
             return Ok(StockLevel);
         }
 
-        [HttpPatch("UpdateStockLevel/{id}")]
-        public async Task<IActionResult> UpdateStocklevel(LevelStockPatch levelStockPatch, int id)
+        [Authorize(Roles = "Admin")]
+        [HttpPatch("UpdateMinMaxStockLevel/{id}")]
+        public async Task<IActionResult> UpdateMinMaxStocklevel(LevelStockPatch levelStockPatch, int id)
         {
             if (!ModelState.IsValid)
             {
@@ -52,7 +59,7 @@ namespace Inventory.Controllers
             try
             {
                 var productModel = levelStockPatch.UpdateStockLevel();
-                await _stockLevelRepository.UpdateMinimunStockLevel(productModel, id);
+                await _iinventoryServices.UpdateMinMaxStockLevel(productModel, id);
                 return Ok(productModel);
             }
             catch (InvalidOperationException ex)
@@ -62,6 +69,10 @@ namespace Inventory.Controllers
         }
 
 
+        
+
+
+        
         [HttpGet("GetLowStockProducts")]
         public async Task<IActionResult> GetLowStockProducts()
         {

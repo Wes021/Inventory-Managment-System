@@ -29,9 +29,6 @@ namespace Inventory.Models.Reopositories
 
 
 
-
-
-
         public async Task<IEnumerable<ProductCategory>> GetProductCategoryAsync()
         {
             return await _inventoryManagmentSystemContext.ProductCategories.OrderBy(c => c.ProductCategoryId).ToListAsync();

@@ -21,6 +21,8 @@ public partial class Product
 
     public int minimum_quantity_level { get; set; }
 
+    public int maximum_quantity_level { get; set; }
+
     public virtual ProductCategory Category { get; set; } = null!;
 
     public virtual ProductStatus Status { get; set; } = null!;

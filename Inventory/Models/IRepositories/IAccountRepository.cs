@@ -7,6 +7,6 @@ namespace Inventory.Models.IRepositories
         Task<bool> RegesterUser(NewUserRegestrationDTO newUserRegestrationDTO, string role);
 
 
-        Task<String> LogIn(LoginDTO loginDTO);
+        Task<AuthResponseDTO> LogIn(LoginDTO loginDTO);
     }
 }

@@ -5,12 +5,12 @@ namespace Inventory.Models.IRepositories
 {
     public interface IStockLevelRepository
     {
-        Task<List<ProductLevelStockDTO>> GetStockLevelsAsync();
+        Task<IEnumerable<ProductLevelStockDTO>> GetStockLevelsAsync();
 
         Task<ProductLevelStockDTO> GetStockLevelsByIdAsync(int id);
 
-        Task<int> UpdateMinimunStockLevel(Product product, int id);
+        
 
-        Task<List<ProductLevelStockDTO>> GetLowStockProductsAsync();
+        Task<IEnumerable<ProductLevelStockDTO>> GetLowStockProductsAsync();
     }
 }

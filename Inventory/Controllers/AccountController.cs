@@ -2,6 +2,7 @@
 using Inventory.DTO_S.Account;
 using Inventory.Models;
 using Inventory.Models.IRepositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Microsoft.Identity.Client;
 
 namespace Inventory.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
@@ -20,7 +22,8 @@ namespace Inventory.Controllers
             _accountRepository = accountRepository;
         }
 
-        [HttpPost("RegisterNewUser")]
+        [Authorize(Roles = "Admin")]
+        [HttpPost("AddNewUser")]
         public async Task<IActionResult> RegisterUser([FromBody] NewUserRegestrationDTO newUserRegestrationDTO, string role)
         {
             if (newUserRegestrationDTO is null)
@@ -35,13 +38,18 @@ namespace Inventory.Controllers
         }
 
 
+        
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
         {
             try
             {
                 var result = await _accountRepository.LogIn(loginDTO);
-                return Ok(result); // Send JWT and roles back to client
+
+                
+
+
+                return Ok(result);
             }
             catch (UnauthorizedAccessException ex)
             {

@@ -2,12 +2,14 @@
 using Inventory.DTO_S.Supplier;
 using Inventory.Mappers.StockTrsansAction;
 using Inventory.Models.IRepositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace Inventory.Controllers
 {
+    //[Authorize (Roles ="Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class SupplierController : ControllerBase
@@ -18,6 +20,7 @@ namespace Inventory.Controllers
             _supplierRepository = supplierRepository;
         }
 
+        //[Authorize(Roles = "Admin, Employee")]
         [HttpGet("GetSuppliers")]
         public async Task<IActionResult> GetSuppliers()
         {
@@ -26,8 +29,9 @@ namespace Inventory.Controllers
             return Ok(suppliers);
         }
 
-        [HttpGet("GetSupplierById/{id}")]
 
+        //[Authorize (Roles ="Admin, Employee")]
+        [HttpGet("GetSupplierById/{id}")]
         public async Task<IActionResult> GetSupplierById(int id)
         {
             var supplier = await _supplierRepository.GetSupplierByIdAsync(id);
@@ -39,6 +43,8 @@ namespace Inventory.Controllers
 
             return Ok(supplier);
         }
+
+
 
         [HttpPost("AddSupplier")]
         public async Task<IActionResult> AddSupplierAsync([FromBody] SupplierDTO supplierDTO)
@@ -59,6 +65,7 @@ namespace Inventory.Controllers
                 return Conflict(ex.Message);
             }
         }
+
 
 
         [HttpPatch("UpdateSupplier/{id}")]

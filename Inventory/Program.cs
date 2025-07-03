@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Inventory.Helpers;
+using Inventory.Services.IServicesInterfaces;
+using Inventory.Services.ServicesImplemntaion;
+using Sieve.Services;
 
 namespace Inventory
 {
@@ -17,7 +20,7 @@ namespace Inventory
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            
             builder.Services.AddDbContext<InventoryManagmentSystemContext>(Options =>
             {
                 Options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]);
@@ -54,17 +57,31 @@ namespace Inventory
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
             builder.Services.AddScoped<IinventoryRepository, InventoryRepository>();
+            builder.Services.AddScoped<IinventoryServices, InventoryServices>();
             builder.Services.AddScoped<IStockLevelRepository, StockLevelRepository>();
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+            
             builder.Services.AddSingleton<GenerateJwtTokenHelper>();
+
+            builder.Services.AddSingleton<SieveProcessor>();
             
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowLocalhost",
+                    builder => builder
+                        .WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+            });
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -77,7 +94,7 @@ namespace Inventory
             app.UseAuthentication();
 
             app.MapControllers();
-
+            app.UseCors("AllowLocalhost");
             app.Run();
         }
     }

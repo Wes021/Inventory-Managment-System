@@ -2,12 +2,14 @@
 using Inventory.Mappers.Category;
 using Inventory.Models;
 using Inventory.Models.IRepositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inventory.Controllers
 {
+    [Authorize(Roles ="Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
@@ -20,6 +22,7 @@ namespace Inventory.Controllers
         }
 
 
+        [Authorize(Roles = "Admin, Employee")]
         [HttpGet("GetCategories")]
         public async Task<IActionResult> GetAll()
         {
@@ -41,6 +44,7 @@ namespace Inventory.Controllers
             return Ok(categoryModel);
         }
 
+        [Authorize(Roles = "Admin, Employee")]
         [HttpGet("GetCategoryById/{Category_id}")]
         public async Task<IActionResult> GetById(int Category_id)
         {

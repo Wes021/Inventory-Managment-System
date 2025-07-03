@@ -11,7 +11,8 @@ namespace Inventory.Mappers.StockTrsansAction
         {
             return new Models.Product
             {
-                minimum_quantity_level=levelStockPatch.minimum_quantity_level
+                minimum_quantity_level=levelStockPatch.minimum_quantity_level,
+                maximum_quantity_level=levelStockPatch.maximum_quantity_level
                 
             };
         }
@@ -24,6 +25,7 @@ namespace Inventory.Mappers.StockTrsansAction
                 ProductName = productLevelStockDTO.ProductName,
                 Quantity= productLevelStockDTO.Quantity,
                 minimum_quantity_level = productLevelStockDTO.minimum_quantity_level,
+                maximum_quantity_level=productLevelStockDTO.maximum_quantity_level,
                 Status = new ProductStatus
                 {
                     ProductStatus1 = productLevelStockDTO.status

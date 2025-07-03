@@ -27,6 +27,7 @@ namespace Inventory.Mappers.Product
                 ProductName = getProductsDTO.ProductName,
                 Quantity = getProductsDTO.Quantity,
                 minimum_quantity_level=getProductsDTO.minimum_quantity_level,
+                maximum_quantity_level=getProductsDTO.maximum_quantity_level,
                 Category = new ProductCategory
                 {
                     ProductCategoryName = getProductsDTO.Category
