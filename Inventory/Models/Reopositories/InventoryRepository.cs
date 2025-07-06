@@ -42,7 +42,7 @@ namespace Inventory.Models.Reopositories
                             TransId = sdr.GetInt32(sdr.GetOrdinal("trans_id")),
                             ProductId = sdr.GetInt32(sdr.GetOrdinal("product_id")),
                             Quantity = sdr.GetInt32(sdr.GetOrdinal("quantity")),
-                            DataTime = sdr.GetDateTime(sdr.GetOrdinal("data_time")),
+                            TransactionDate = sdr.GetDateTime(sdr.GetOrdinal("data_time")),
                             Note = sdr.GetString(sdr.GetOrdinal("note")),
                             user = sdr.GetString(sdr.GetOrdinal("fisrtName")) + " " + sdr.GetString(sdr.GetOrdinal("lastName")),
                             product = sdr.GetString(sdr.GetOrdinal("product_name")),

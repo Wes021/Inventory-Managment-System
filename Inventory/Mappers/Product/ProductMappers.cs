@@ -57,5 +57,22 @@ namespace Inventory.Mappers.Product
                 description = updatePoductDTO.Description,
             };
         }
+
+
+
+        public static Models.Product AddProductMapper(this AddProductDto addProductDto)
+        {
+            return new Models.Product
+            {
+                ProductName=addProductDto.productName,
+                Quantity=addProductDto.quantity,
+                CategoryId=addProductDto.categoryId,
+                SupplierId=addProductDto.supplierId,
+                StatusId=addProductDto.status_id,
+                description=addProductDto.description,
+                minimum_quantity_level=addProductDto.minimum_quantity_level,
+                maximum_quantity_level=addProductDto.maximum_quantiry_level
+            };
+        }
     }
 }

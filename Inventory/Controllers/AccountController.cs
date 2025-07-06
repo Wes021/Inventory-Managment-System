@@ -22,16 +22,16 @@ namespace Inventory.Controllers
             _accountRepository = accountRepository;
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost("AddNewUser")]
-        public async Task<IActionResult> RegisterUser([FromBody] NewUserRegestrationDTO newUserRegestrationDTO, string role)
+        public async Task<IActionResult> RegisterUser([FromBody] NewUserRegestrationDTO newUserRegestrationDTO)
         {
             if (newUserRegestrationDTO is null)
             {
                 return BadRequest();
             }
 
-            var result = await _accountRepository.RegesterUser(newUserRegestrationDTO, role);
+            var result = await _accountRepository.RegesterUser(newUserRegestrationDTO);
 
 
             return StatusCode(201);

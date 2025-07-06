@@ -1,5 +1,6 @@
 ﻿using Inventory.DTO_S;
 using Inventory.DTO_S.Product;
+using Inventory.Mappers.Product;
 using Inventory.Models.IRepositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -83,14 +84,16 @@ namespace Inventory.Models.Reopositories
         }
 
 
-        public Task<int> AddProduct(Product product)
+        public Task<int> AddProduct(AddProductDto addProductDto)
         {
             var existingProduct = _inventoryManagmentSystemContext.Products
-                .FirstOrDefault(p => p.ProductId == product.ProductId);
+                .FirstOrDefault(p => p.ProductName == addProductDto.productName);
             if (existingProduct != null)
             {
                 throw new InvalidOperationException("Product with the same ID already exists.");
             }
+
+            var product = ProductMappers.AddProductMapper(addProductDto);
             _inventoryManagmentSystemContext.Products.Add(product);
             return _inventoryManagmentSystemContext.SaveChangesAsync();
 

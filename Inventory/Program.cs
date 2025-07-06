@@ -1,16 +1,17 @@
 
+using Inventory.Helpers;
 using Inventory.Models;
 using Inventory.Models.IRepositories;
 using Inventory.Models.Reopositories;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using Inventory.Helpers;
 using Inventory.Services.IServicesInterfaces;
 using Inventory.Services.ServicesImplemntaion;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Sieve.Services;
+using System.Text;
 
 namespace Inventory
 {

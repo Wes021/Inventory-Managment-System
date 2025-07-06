@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Inventory.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
@@ -19,7 +19,7 @@ namespace Inventory.Controllers
             _productRepository = productRepository;
         }
 
-        [Authorize(Roles = "Admin, Employee")]
+        //[Authorize(Roles = "Admin, Employee")]
         [HttpGet("GetProducts")]
         public async Task<IActionResult> GetProducts()
         {
@@ -30,7 +30,7 @@ namespace Inventory.Controllers
 
         
         [HttpPost("AddProduct")]
-        public async Task<IActionResult> AddProduct(ProductDTO productDTO)
+        public async Task<IActionResult> AddProduct(AddProductDto productDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -39,9 +39,9 @@ namespace Inventory.Controllers
 
             try
             {
-                var productModel = productDTO.ToProductFromCreateDTO();
-                await _productRepository.AddProduct(productModel);
-                return Ok(productModel);
+               
+                await _productRepository.AddProduct(productDTO);
+                return Ok(productDTO);
             }
             catch (InvalidOperationException ex)
             {

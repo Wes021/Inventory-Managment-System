@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Inventory.Controllers
 {
-    [Authorize(Roles = "Admin, Employee")]
+    //[Authorize(Roles = "Admin, Employee")]
     [Route("api/[controller]")]
     [ApiController]
     public class InventoryController : ControllerBase

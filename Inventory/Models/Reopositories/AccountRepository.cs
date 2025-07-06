@@ -62,11 +62,11 @@ namespace Inventory.Models.Reopositories
             };
         }
 
-        public async Task<bool> RegesterUser(NewUserRegestrationDTO newUserRegestrationDTO, string role)
+        public async Task<bool> RegesterUser(NewUserRegestrationDTO newUserRegestrationDTO/*, string role*/)
         {
             var user = _mapper.Map<ApplicationUser>(newUserRegestrationDTO);
 
-            if (await _roleManager.RoleExistsAsync(role))
+            if (await _roleManager.RoleExistsAsync(newUserRegestrationDTO.role))
             {
                 var result = await _userManager.CreateAsync(user, newUserRegestrationDTO.Password);
 
@@ -75,7 +75,7 @@ namespace Inventory.Models.Reopositories
                     throw new Exception("User failed to create");  
                 }
                 
-                await _userManager.AddToRoleAsync(user, role);
+                await _userManager.AddToRoleAsync(user, newUserRegestrationDTO.role);
             }
             else
             {

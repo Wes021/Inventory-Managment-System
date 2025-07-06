@@ -7,7 +7,7 @@ namespace Inventory.Models.IRepositories
     {
         Task<IEnumerable<GetProductsDTO>> GetProductAsync();
 
-        Task<int> AddProduct(Product product);
+        Task<int> AddProduct(AddProductDto addProductDto);
 
         Task<int> UpdateProduct(Product product, int id);
 

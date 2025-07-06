@@ -12,7 +12,7 @@ namespace Inventory.Mappers.StockTrsansAction
                 TransId = stockTransactionDTOproductDTO.TransId,
                 ProductId = stockTransactionDTOproductDTO.ProductId,
                 Quantity = stockTransactionDTOproductDTO.Quantity,
-                DataTime = stockTransactionDTOproductDTO.DataTime,
+                DataTime = stockTransactionDTOproductDTO.TransactionDate,
                 Note = stockTransactionDTOproductDTO.Note,
                 User = new ApplicationUser
                 {

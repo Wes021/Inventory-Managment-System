@@ -12,6 +12,8 @@ namespace Inventory.DTO_S.Account
 
         public int StatusId { get; set; }
 
+        public string role { get; set; }
+
         [Required(ErrorMessage = "Email is required")]
         public string Email { get; set; }
 

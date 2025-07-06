@@ -10,7 +10,7 @@ namespace Inventory.DTO_S
 
         public int Quantity { get; set; }
 
-        public DateTime DataTime { get; set; }
+        public DateTime TransactionDate { get; set; }
         public string Note { get; set; } = null!;
         public string user { get; set; }
         public string product { get; set; }
